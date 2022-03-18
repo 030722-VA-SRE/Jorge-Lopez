@@ -1,5 +1,6 @@
 package com.revature.web;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ import com.revature.modal.Item;
 import com.revature.persistence.ItemArrayList;
 import com.revature.persistence.ItemDao;
 import com.revature.service.ItemService;
+import com.revature.util.ConnectionUtil;
 
 import io.javalin.Javalin;
 
@@ -21,34 +23,11 @@ public class Driver {
 	
 	
 	public static void main(String[] args) {
-	     dbConnection();
+	     //dbConnection();
 		 basicItemApp();
-	            
+	    
 	}
-	public static void dbConnection() {
-		//Setup Database connection
-		/* 
-		 * url
-		 * username
-		 * password
-		 * */
-		
-		
-		//String url = "jdbc:postgres://postgresdb-1.cokq2ji1eim5.us-east-1.rds.amazonaws.com:5432/postgres";
-		String url = "jdbc:postgresql://postgresdb-1.cokq2ji1eim5.us-east-1.rds.amazonaws.com:5432/postgres";
-		String username = "postgresDB";
-		String password = "basketball";
-		
-		
-		try (Connection c = DriverManager.getConnection(url,username,password)){
-			System.out.println(c.getMetaData().getDriverName());
-			//System.out.println(c.)
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+	
 	 public static void basicItemApp() {
 		
 		 //ItemDao itemDao = new ItemArrayList();
@@ -60,6 +39,8 @@ public class Driver {
 	        app.start();
 	        
 	        app.get("/items", (ctx) -> {
+	        	
+	        	//String 
 	        	//itemDao.getItems();
 	        	//ctx.json(ItemList);
 	        	ctx.json(iS.getAllProducts());

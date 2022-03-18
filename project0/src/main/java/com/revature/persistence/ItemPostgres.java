@@ -1,5 +1,6 @@
 package com.revature.persistence;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import com.revature.modal.Item;
 import com.revature.service.*;
+import com.revature.util.ConnectionUtil;
 
 public class ItemPostgres implements ItemDao {
 
@@ -21,15 +23,12 @@ public class ItemPostgres implements ItemDao {
 	//public int addItem(String name,String description) {
 	@Override
 	public int addItem(Item newItem) {
-		
-		String url = "jdbc:postgresql://postgresdb-1.cokq2ji1eim5.us-east-1.rds.amazonaws.com:5432/postgres";
-		String username = "postgresDB";
-		String password = "basketball";
+	
 		
 		int randItemID = 0;
 		String sql = " INSERT INTO item (itemName,hometown,itemDescription) values (?,?,?) returning itemid";
 		
-		try(Connection c = DriverManager.getConnection(url,username,password)){
+		try(Connection c = ConnectionUtil.getConnectionfromProperyFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
 			
 			ps.setString(1, newItem.getItemName());
@@ -43,7 +42,7 @@ public class ItemPostgres implements ItemDao {
 			}
 			
 			
-		}catch (SQLException except) {
+		}catch (SQLException | IOException except ) {
 			except.printStackTrace();
 		}
 		
@@ -52,15 +51,12 @@ public class ItemPostgres implements ItemDao {
 
 	@Override
 	public Item getItem(int id) {
-		String url = "jdbc:postgresql://postgresdb-1.cokq2ji1eim5.us-east-1.rds.amazonaws.com:5432/postgres";
-		String username = "postgresDB";
-		String password = "basketball";
 		
 		
 		String sql = "SELECT * from item where itemid = ?";
 		Item itemToRetrieve = null;
 		
-		try(Connection c= DriverManager.getConnection(url,username,password)) {
+		try(Connection c= ConnectionUtil.getConnectionfromProperyFile()) {
 			PreparedStatement ps = c.prepareStatement(sql);
 			
 			ps.setInt(1, id);
@@ -75,7 +71,7 @@ public class ItemPostgres implements ItemDao {
 				itemToRetrieve.setDescription(rs.getString("itemDescription"));
 			}
 			
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 
@@ -84,20 +80,18 @@ public class ItemPostgres implements ItemDao {
 
 	@Override
 	public boolean updateItem(Item item) {
-		String url = "jdbc:postgresql://postgresdb-1.cokq2ji1eim5.us-east-1.rds.amazonaws.com:5432/postgres";
-		String username = "postgresDB";
-		String password = "basketball";
 		
 		String sql = "UPDATE item SET itemdescription = ? WHERE itemid = ? returning *";
 		int changedRows = -1;
-		
-		try(Connection c = DriverManager.getConnection(url,username,password)){
+		String details = null;
+		try(Connection c = ConnectionUtil.getConnectionfromProperyFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
 			
 			ps.setString(1, item.getDescription());
 			ps.setInt(2, item.getItemID());
 			
 			ResultSet rs = ps.executeQuery();
+			
 			if(rs.next()) {
 				return true;
 			} 
@@ -105,7 +99,7 @@ public class ItemPostgres implements ItemDao {
 			
 			changedRows = ps.executeUpdate();
 			
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			//System.out.println("in catch  exception");
 			e.printStackTrace();
 			
@@ -120,21 +114,19 @@ public class ItemPostgres implements ItemDao {
 
 	@Override
 	public boolean deleteItem(int id) {
-		String url = "jdbc:postgresql://postgresdb-1.cokq2ji1eim5.us-east-1.rds.amazonaws.com:5432/postgres";
-		String username = "postgresDB";
-		String password = "basketball";
+		
 		
 		String sql = "DELETE FROM item WHERE id = ?";
 		int changedRows = 0;
 		
-		try(Connection c = DriverManager.getConnection(url,username,password)){
+		try(Connection c = ConnectionUtil.getConnectionfromProperyFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
 			
 			ps.setInt(1, id);
 			
 			changedRows = ps.executeUpdate();
 			
-		} catch(SQLException e) {
+		} catch(SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		if(changedRows < 1) {
@@ -147,11 +139,9 @@ public class ItemPostgres implements ItemDao {
 	@Override
 	public List<Item> getItems() {
 		String sql = "SELECT * FROM item";
-		String url = "jdbc:postgresql://postgresdb-1.cokq2ji1eim5.us-east-1.rds.amazonaws.com:5432/postgres";
-		String username = "postgresDB";
-		String password = "basketball";
+		
 		List<Item> itemList = new ArrayList<>();
-		try (Connection c = DriverManager.getConnection(url,username,password)){
+		try (Connection c = ConnectionUtil.getConnectionfromProperyFile()){
 			Statement s = c.createStatement();
 			
 			ResultSet r = s.executeQuery(sql);
@@ -167,7 +157,7 @@ public class ItemPostgres implements ItemDao {
 			
 			
 			
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -177,14 +167,12 @@ public class ItemPostgres implements ItemDao {
 
 	@Override
 	public List<Item> getItembyFirstCriteria(String hometown) {
-		String url = "jdbc:postgresql://postgresdb-1.cokq2ji1eim5.us-east-1.rds.amazonaws.com:5432/postgres";
-		String username = "postgresDB";
-		String password = "basketball";
+		
 		
 		String sql = "SELECT * FROM item WHERE hometown = ? ";
 		List<Item> itemList = new ArrayList<>();
 		Item item = null;
-		try(Connection c = DriverManager.getConnection(url,username,password)) {
+		try(Connection c = ConnectionUtil.getConnectionfromProperyFile()) {
 			PreparedStatement ps = c.prepareStatement(sql);
 			
 			
@@ -203,7 +191,7 @@ public class ItemPostgres implements ItemDao {
 				itemList.add(item);
 			}
 		
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			
 			e.printStackTrace();
 		}
