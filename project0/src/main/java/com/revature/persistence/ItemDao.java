@@ -22,5 +22,7 @@ public interface ItemDao {
 	
 	List<Item> getItembyFirstCriteria(String hometown);
 	
+	Item getItembyName(String name);
+	
 
 }

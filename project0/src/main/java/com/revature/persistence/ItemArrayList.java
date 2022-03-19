@@ -92,4 +92,10 @@ public class ItemArrayList implements ItemDao{
 		return null;
 	}
 
+	@Override
+	public Item getItembyName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

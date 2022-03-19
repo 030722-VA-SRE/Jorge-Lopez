@@ -10,7 +10,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.modal.Item;
+//import com.rev
+import com. revature.modal.Item;
 import com.revature.service.*;
 import com.revature.util.ConnectionUtil;
 
@@ -139,7 +140,7 @@ public class ItemPostgres implements ItemDao {
 	@Override
 	public List<Item> getItems() {
 		String sql = "SELECT * FROM item";
-		
+		Item i = null;
 		List<Item> itemList = new ArrayList<>();
 		try (Connection c = ConnectionUtil.getConnectionfromProperyFile()){
 			Statement s = c.createStatement();
@@ -147,7 +148,7 @@ public class ItemPostgres implements ItemDao {
 			ResultSet r = s.executeQuery(sql);
 			
 			while(r.next()) {
-				Item i = new Item();
+				i = new Item();
 				i.setItemID(r.getInt("itemid"));
 				i.setItemName(r.getString("itemname"));
 				i.setHomeTown(r.getString("hometown"));
@@ -169,18 +170,19 @@ public class ItemPostgres implements ItemDao {
 	public List<Item> getItembyFirstCriteria(String hometown) {
 		
 		
-		String sql = "SELECT * FROM item WHERE hometown = ? ";
+		String sql = "SELECT * FROM item WHERE hometown = ?;";
 		List<Item> itemList = new ArrayList<>();
+		//Item item = null;
 		Item item = null;
 		try(Connection c = ConnectionUtil.getConnectionfromProperyFile()) {
 			PreparedStatement ps = c.prepareStatement(sql);
-			
 			
 			ps.setString(1,hometown);
 			ResultSet rs = ps.executeQuery();
 			
 			
 			while(rs.next()) {
+				//System.out.println(rs.getInt("itemid"));
 				item = new Item();
 				
 				item.setItemID(rs.getInt("itemid"));
@@ -197,6 +199,38 @@ public class ItemPostgres implements ItemDao {
 		}
 			
 		return itemList;
+	}
+	
+
+	@Override
+	public Item getItembyName(String name) {
+		String sql = "select * from item where itemname = ?";
+		Item retrievedItem = null;
+		
+		try(Connection c = ConnectionUtil.getConnectionfromProperyFile()){
+			PreparedStatement ps = c.prepareStatement(sql);
+			
+			ps.setString(1, name);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				retrievedItem = new Item();
+				retrievedItem.setItemID(rs.getInt("itemid"));
+				retrievedItem.setItemName(rs.getString("itemname"));
+				retrievedItem.setHomeTown(rs.getString("hometown"));
+				retrievedItem.setDescription(rs.getString("itemdescription"));
+
+				
+				return retrievedItem;
+			}
+			
+			
+		} catch (SQLException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		return null;
 	}
 	
 	//public List

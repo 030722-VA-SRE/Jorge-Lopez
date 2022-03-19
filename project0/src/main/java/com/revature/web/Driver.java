@@ -5,9 +5,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jetty.http.HttpStatus;
 
+import com.revature.exceptions.ItemNotFoundException;
 import com.revature.modal.Item;
 import com.revature.persistence.ItemArrayList;
 import com.revature.persistence.ItemDao;
@@ -39,11 +41,23 @@ public class Driver {
 	        app.start();
 	        
 	        app.get("/items", (ctx) -> {
+	        	String hometown = ctx.queryParam("hometown");
+	        	String name = ctx.queryParam("name");
 	        	
-	        	//String 
-	        	//itemDao.getItems();
-	        	//ctx.json(ItemList);
-	        	ctx.json(iS.getAllProducts());
+	        		if(hometown != null && name == null) {
+		        		List<Item> newItem = iS.searchForItem(hometown);
+		        		ctx.json(newItem);
+		        	} else if(name != null && hometown == null) {
+		        		Item nuItem = iS.searchForSecondCriteria(name);
+		        		ctx.json(nuItem);
+		        	}
+		        	else {
+		        	
+		        		ctx.json(iS.getAllProducts());
+		        	}
+	        	
+	        		
+	        
 	        });
 	        
 	        app.get("/item/{id}",(ctx)->{
@@ -112,13 +126,13 @@ public class Driver {
 	        	
 	        	
 	        });
-	        app.get("/items?someCriteria=", (ctx)->{
-	        	//String search = ctx.queryParam("")
-	        });
-	        
-	        app.get("/items?someOtherCriteria=", (ctx)->{
-	        	
-	        });
+//	        app.get("/items?someCriteria=", (ctx)->{
+//	        	//String search = ctx.queryParam("")
+//	        });
+//	        
+//	        app.get("/items?someOtherCriteria=", (ctx)->{
+//	        	
+//	        });
 	 }
 	 
 }

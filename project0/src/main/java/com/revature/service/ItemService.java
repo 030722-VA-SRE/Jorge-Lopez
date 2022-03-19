@@ -8,6 +8,7 @@ import com.revature.modal.Item;
 import com.revature.persistence.ItemArrayList;
 import com.revature.persistence.ItemDao;
 import com.revature.persistence.ItemPostgres;
+import com.revature.exceptions.ItemNotFoundException;
 //import com.revature.service.*;
 import com.revature.modal.*;
 
@@ -18,7 +19,7 @@ public class ItemService {
 	}
 	
 	
-	static ArrayList<Item> ItemList = new ArrayList<Item>(); 
+	//static ArrayList<Item> ItemList = new ArrayList<Item>(); 
 	
 	 ItemDao itemDao = new ItemPostgres();
 	 
@@ -69,7 +70,14 @@ public class ItemService {
 	}
 	
 	//TODO: Method to search for certain criteria
-	public void searchForItem() {
+	public List<Item> searchForItem(String hometown) {
+//		if(hometown == null) {
+//			//throw ItemNotFoundException();
+//		}
+		return itemDao.getItembyFirstCriteria(hometown);
+	}
+	public Item searchForSecondCriteria(String name) throws ItemNotFoundException {
+		return itemDao.getItembyName(name);
 		
 	}
 	
