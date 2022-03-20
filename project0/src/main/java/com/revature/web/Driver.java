@@ -32,8 +32,6 @@ public class Driver {
 	
 	 public static void basicItemApp() {
 		
-		 //ItemDao itemDao = new ItemArrayList();
-		// Item item = new Item();
 		 ItemService iS = new ItemService();
 		 Javalin app = Javalin.create();
 	        //app.get("/", ctx -> ctx.result("Hello World"));
@@ -61,8 +59,7 @@ public class Driver {
 	        });
 	        
 	        app.get("/item/{id}",(ctx)->{
-	        	//ctx.json(Item.class);
-	        	//Item item = null;
+	        	
 	        	String itemid = ctx.pathParam("id");
 	        	
 	        	int idNum = Integer.parseInt(itemid);
@@ -72,23 +69,15 @@ public class Driver {
 	        		ctx.status(404);
 	        		
 	        	} else {
+	        		ctx.status(200);
 	        		ctx.json(itemByID);
 	        	}
-	        	
-	        	
-	        	
-	        	//ctx.json(iS.getItemWithID(0))
+	   
 	        	
 	        });
 	        app.post("/items", (ctx)->{
 	        	Item newItem = ctx.bodyAsClass(Item.class);
 	        	
-	        	//String name = ctx.queryParam(newItem.getItemName());
-	        	
-	        	//String description = ctx.queryParam(newItem.getDescription());
-	        	
-	        	
-	        	//int genID = itemDao.addItem(newItem);
 	        	int genID = iS.addItem(newItem);
 	        	
 	        	if(genID == -1) {
@@ -103,36 +92,27 @@ public class Driver {
 	        	
 	        });
 	        
-	        app.put("/items/{id}", (ctx)->{
+	        app.put("/item/{id}", (ctx)->{
 	        	String itemid = ctx.pathParam("id");
 	        	Item newitem = ctx.bodyAsClass(Item.class);
 	        	int id = Integer.parseInt(itemid);
 	        	
-	        	//Item itemToSearch = iS.getItemWithID(id);
-	        	//Item itemToSearch = ItemList.get(id);
+	        	
 	        	newitem.setItemID(newitem.getItemID());
-	        	
 	        	newitem.setDescription(newitem.getDescription());
-	        	
-	        	//iS.updateItem(newitem);
-	        	/*if(itemToSearch.getItemID() != id) {
+	        
+	        	if(id != newitem.getItemID()) {
 	        		ctx.status(404);
 	        	} else {
-	        		iS.updateItem(itemToSearch);
+	        		iS.updateItem(newitem);
 	        		ctx.status(200);
-	        		//
-	        	}*/
+	        	}
+	        	
 	        	
 	        	
 	        	
 	        });
-//	        app.get("/items?someCriteria=", (ctx)->{
-//	        	//String search = ctx.queryParam("")
-//	        });
-//	        
-//	        app.get("/items?someOtherCriteria=", (ctx)->{
-//	        	
-//	        });
+
 	 }
 	 
 }

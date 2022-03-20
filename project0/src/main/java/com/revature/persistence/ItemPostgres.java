@@ -2,26 +2,17 @@ package com.revature.persistence;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-//import com.rev
 import com. revature.modal.Item;
-import com.revature.service.*;
 import com.revature.util.ConnectionUtil;
 
 public class ItemPostgres implements ItemDao {
 
-	//Item item = new Item();
-	//static List<Item> itemList = new ArrayList<>();
-	
-	
-	//public int addItem(String name,String description) {
 	@Override
 	public int addItem(Item newItem) {
 	
@@ -82,23 +73,32 @@ public class ItemPostgres implements ItemDao {
 	@Override
 	public boolean updateItem(Item item) {
 		
-		String sql = "UPDATE item SET itemdescription = ? WHERE itemid = ? returning *";
+		String sql = "UPDATE item SET itemdescription = ? WHERE itemid = ? returning *;";
+		//String query = "SELECT * FROM item where itemid = ?";
 		int changedRows = -1;
-		String details = null;
+		//String details = item.getDescription();
 		try(Connection c = ConnectionUtil.getConnectionfromProperyFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
-			
+			//PreparedStatement s1 = c.prepareStatement(query);
+			//item.setDescription(details);
 			ps.setString(1, item.getDescription());
 			ps.setInt(2, item.getItemID());
 			
-			ResultSet rs = ps.executeQuery();
 			
-			if(rs.next()) {
-				return true;
-			} 
+			ps.executeUpdate();
+			//System.out.println("update executed");
+			//changedRows = ps.executeUpdate();
+			//s1.setInt(1,item.getItemID());
+			
+			//ResultSet rs = s1.executeQuery(query);
+			//if(rs.next()) {
+				
+				
+				//return true;
+			//} 
 			
 			
-			changedRows = ps.executeUpdate();
+			
 			
 		} catch (SQLException | IOException e) {
 			//System.out.println("in catch  exception");

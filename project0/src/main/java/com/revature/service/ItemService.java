@@ -1,16 +1,16 @@
 package com.revature.service;
 
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.UUID;
+
 
 import com.revature.modal.Item;
-import com.revature.persistence.ItemArrayList;
+
 import com.revature.persistence.ItemDao;
 import com.revature.persistence.ItemPostgres;
 import com.revature.exceptions.ItemNotFoundException;
 //import com.revature.service.*;
-import com.revature.modal.*;
+
 
 public class ItemService {
 	
@@ -18,13 +18,8 @@ public class ItemService {
 		//super();
 	}
 	
-	
-	//static ArrayList<Item> ItemList = new ArrayList<Item>(); 
-	
 	 ItemDao itemDao = new ItemPostgres();
-	 
-		
-	//TODO: Method to add an item to List
+
 	public int addItem(Item newItem){
 		
 		int id = itemDao.addItem(newItem);
@@ -32,76 +27,57 @@ public class ItemService {
 		if(id != -1) {
 			return id;
 		}
-		//return Item.counter;
 		return -1;
 	}
 	
-	
 	public List<Item> getAllProducts() {
 		return itemDao.getItems();
-		
-		//return ItemList;
 	}
 	
-	public Item getItemWithID(int id){
+	public Item getItemWithID(int id) throws ItemNotFoundException{
 		if(id < 1) {
-			return null;
+			throw new ItemNotFoundException();
 		}
 		
-		Item item = null;
-		item = itemDao.getItem(id);
+		Item item = itemDao.getItem(id);
+		if(item == null) {
+			throw new ItemNotFoundException();
+		}
 		
 		return item;
 		
 	}
 	
-	//TODO: Method to update item based on ID given
 	public boolean updateItem(Item item) {
-		/*
+		
 		if(item!=null) {
 			itemDao.updateItem(item);
+			//System.out.println("After update called in service");
 			return true;
+			
 		}
+		//System.out.println("Outside if: In service class");
 		return false;
 		
-		*/
 		
-		return itemDao.updateItem(item);
+		
+		//return itemDao.updateItem(item);
 	}
 	
-	//TODO: Method to search for certain criteria
-	public List<Item> searchForItem(String hometown) {
-//		if(hometown == null) {
-//			//throw ItemNotFoundException();
-//		}
+	public List<Item> searchForItem(String hometown) throws ItemNotFoundException {
+		if(hometown == null) {
+			throw new ItemNotFoundException();
+		}
 		return itemDao.getItembyFirstCriteria(hometown);
 	}
+	
 	public Item searchForSecondCriteria(String name) throws ItemNotFoundException {
+		if(name == null) {
+			throw new ItemNotFoundException();
+		}
 		return itemDao.getItembyName(name);
 		
 	}
 	
-	public static void main(String [] args) {
-		//System.out.println("1st Project running off dribble!");
-		//Item item = new Item();
-		//ItemService product = new ItemService();
-		//ArrayList<Item> products = new ArrayList<Item>(); 
-		//System.out.println("List should appear below");
-		//product.addItem("Macbook Air");
-		//product.addItem("Headset");
-		//System.out.println("Add Item method: adds item by name to ArrayList");
-		//ItemService item = (ItemService) new Item();
-		//product.addItem(item.getItemName());
-		//product.addItem("Naruto", "Hokage of Leaf Village");
-		//product.addItem("Sasuke", "Part of the Uchiha Clan");
-		//product.addItem("Shikamaru", "Master Strategist");
-
-		//System.out.println("getAllProducts is called: Gets all items from ArrayList");
-		//product.getAllProducts(ItemList);
-		//System.out.println();
-		
-		//product.getItemWithID(item.getItemID());
-		
-		//item.
-	}
+	
 }
