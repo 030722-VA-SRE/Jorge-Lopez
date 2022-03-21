@@ -43,10 +43,13 @@ public class ItemService {
 		}
 		
 		Item item = itemDao.getItem(id);
-		if(item == null) {
-			throw new ItemNotFoundException();
+		try {
+			if(item == null) {
+				throw new ItemNotFoundException();
+			}
+		} catch (ItemNotFoundException e) {
+			log.info("Exception Thrown: Item not found with that ID");
 		}
-		
 		return item;
 		
 	}
@@ -68,6 +71,7 @@ public class ItemService {
 	}
 	
 	public List<Item> searchForItem(String hometown) throws ItemNotFoundException {
+		
 		if(hometown == null) {
 			throw new ItemNotFoundException();
 		}
@@ -81,7 +85,7 @@ public class ItemService {
 				
 			}
 		} catch (ItemNotFoundException e) {
-			log.error("Exception was thrown: " + e.fillInStackTrace());
+			log.info("Exception was thrown: " + "Item not Found");
 		}
 		
 		return itemDao.getItembyName(name);
