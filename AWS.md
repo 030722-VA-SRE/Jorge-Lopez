@@ -15,28 +15,29 @@ Given the following table 'employees'...
 | 9  | Creed     | Branton  | 70     | Quality Assurance |
 
 * Write a query to find all data in the table
-** select * from employees;
+* SELECT * FROM employees;
 
 * Write a query to find employees with a salary over 75
-*  select * from employees where salary > 75;
+* SELECT * FROM employees WHERE salary > 75;
 
 * Write a query to find employees whose first name contains an 'e' or whose last name begins with 'S'\
-*  select firstName from employees where firstName like '%e%' or lastName like 'S%';
+* SELECT firstName FROM employees WHERE firstName LIKE '%e%' OR lastName LIKE 'S%';
 
 * Write a query to find the first name of all employees who do not work in accounting
-*  select firstName from employees where dept not like 'Accounting';
+* SELECT firstName FROM employees WHERE dept NOT LIKE 'Accounting';
 
 * Write a query to find the average salary of all employees whose last names begin with 'M'
-* select avg(salary) from employees where lastName like 'M%';
+* SELECT avg(salary) FROM employees WHERE lastName LIKE 'M%';
 
 * Write a query to find the highest paid salesperson
-* select max(salary) from employees where dept = 'Sales';
+* SELECT max(salary) from employees where dept = 'Sales';
 
 * Write a query to combine the resultsets of any two previous queries
-* select firstName from employees where dept != Accounting union select firstName from employees where salary > 75;
+* SELECT firstName FROM employees WHERE dept != Accounting UNION 
+* SELECT firstName FROM employees WHERE salary > 75;
 
 * Remove all members of accounting from the database
-* delete from employees where dept = Accounting;
+* DELETE FROM employees WHERE dept = Accounting;
 
 * Given removing the dept column from the employees table and creating a table 'department' and linking the two via a foreign key relationship
 
@@ -48,20 +49,20 @@ Given the following table 'employees'...
 | 4       | Customer Service |
 
 * Write a query to find the salary of the lowest paid salesperson (HINT: use a join)
-* select min(employees.salary) from employees join department on employees.dept = dept.dept_id;
+* SELECT min(employees.salary) FROM employees JOIN department ON employees.dept = dept.dept_id;
 
 * Write a query to find the average salary of each department
-* select avg(employees.salary), distinct(employees.dept) from department join employees on dept.name = dept.dept_id;
+* SELECT AVG(employees.salary), DISTINCT(employees.dept) FROM department JOIN employees ON dept.name = dept.dept_id;
 
 * Write a query to find all possible combinations of employees and departments. How many records do you expect?
 
 
 * Change the name of department 4 to 'Quality Assurance'
-* update dept set name = 'Quality Assurance' where dept_id = 4;
+* UPDATE dept SET name = 'Quality Assurance' WHERE dept_id = 4;
 
 * Remove both tables
-* drop table employees;
-* drop table dept;
+* DROP TABLE employees;
+* DROP TABLE dept;
 
 # JDBC
 1.	What is JDBC?
