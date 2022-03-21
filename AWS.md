@@ -15,7 +15,7 @@ Given the following table 'employees'...
 | 9  | Creed     | Branton  | 70     | Quality Assurance |
 
 * Write a query to find all data in the table
-*  select * from employees;
+** select * from employees;
 
 * Write a query to find employees with a salary over 75
 *  select * from employees where salary > 75;
