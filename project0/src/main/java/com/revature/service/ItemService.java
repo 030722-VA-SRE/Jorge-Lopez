@@ -3,6 +3,8 @@ package com.revature.service;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.revature.modal.Item;
 
@@ -13,11 +15,12 @@ import com.revature.exceptions.ItemNotFoundException;
 
 
 public class ItemService {
-	
+	public static Logger log = LogManager.getRootLogger();
 	public ItemService() {
 		//super();
 	}
 	
+
 	 ItemDao itemDao = new ItemPostgres();
 
 	public int addItem(Item newItem){
@@ -72,9 +75,15 @@ public class ItemService {
 	}
 	
 	public Item searchForSecondCriteria(String name) throws ItemNotFoundException {
-		if(name == null) {
-			throw new ItemNotFoundException();
+		try {
+			if(name == null) {
+				throw new ItemNotFoundException();
+				
+			}
+		} catch (ItemNotFoundException e) {
+			log.error("Exception was thrown: " + e.fillInStackTrace());
 		}
+		
 		return itemDao.getItembyName(name);
 		
 	}
