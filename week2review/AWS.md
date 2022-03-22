@@ -49,13 +49,13 @@ Given the following table 'employees'...
 | 4       | Customer Service |
 
 * Write a query to find the salary of the lowest paid salesperson (HINT: use a join)
-* SELECT min(employees.salary) FROM employees JOIN department ON employees.dept = dept.dept_id;
+* SELECT min(employees.salary) FROM employees JOIN department ON employees.dept_id = department.dept_id where department.name = 'Sales';
 
 * Write a query to find the average salary of each department
-* SELECT AVG(employees.salary), DISTINCT(employees.dept) FROM department JOIN employees ON dept.name = dept.dept_id;
+* SELECT AVG(employees.salary), department.name FROM department JOIN employees ON department.dept_id = employees.dept_id GROUP BY department.name;
 
 * Write a query to find all possible combinations of employees and departments. How many records do you expect?
-
+  SELECT * FROM employees CROSS JOIN department; 36 expected records
 
 * Change the name of department 4 to 'Quality Assurance'
 * UPDATE dept SET name = 'Quality Assurance' WHERE dept_id = 4;

@@ -15,7 +15,6 @@ public class ItemPostgres implements ItemDao {
 
 	@Override
 	public int addItem(Item newItem) {
-	
 		
 		int randItemID = 0;
 		String sql = " INSERT INTO item (itemName,hometown,itemDescription) values (?,?,?) returning itemid";
@@ -74,32 +73,18 @@ public class ItemPostgres implements ItemDao {
 	public boolean updateItem(Item item) {
 		
 		String sql = "UPDATE item SET itemdescription = ? WHERE itemid = ? returning *;";
-		//String query = "SELECT * FROM item where itemid = ?";
+		
 		int changedRows = -1;
-		//String details = item.getDescription();
+		
 		try(Connection c = ConnectionUtil.getConnectionfromProperyFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
-			//PreparedStatement s1 = c.prepareStatement(query);
-			//item.setDescription(details);
+			
 			ps.setString(1, item.getDescription());
 			ps.setInt(2, item.getItemID());
 			
 			
 			ps.executeUpdate();
-			//System.out.println("update executed");
-			//changedRows = ps.executeUpdate();
-			//s1.setInt(1,item.getItemID());
-			
-			//ResultSet rs = s1.executeQuery(query);
-			//if(rs.next()) {
-				
-				
-				//return true;
-			//} 
-			
-			
-			
-			
+	
 		} catch (SQLException | IOException e) {
 			//System.out.println("in catch  exception");
 			e.printStackTrace();
@@ -139,7 +124,7 @@ public class ItemPostgres implements ItemDao {
 
 	@Override
 	public List<Item> getItems() {
-		String sql = "SELECT * FROM item";
+		String sql = "SELECT * FROM item ORDER BY itemid";
 		Item i = null;
 		List<Item> itemList = new ArrayList<>();
 		try (Connection c = ConnectionUtil.getConnectionfromProperyFile()){
@@ -206,12 +191,14 @@ public class ItemPostgres implements ItemDao {
 	public Item getItembyName(String name) {
 		String sql = "select * from item where itemname = ?";
 		Item retrievedItem = null;
-		
+	
 		try(Connection c = ConnectionUtil.getConnectionfromProperyFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
 			
 			ps.setString(1, name);
+			
 			ResultSet rs = ps.executeQuery();
+			
 			
 			if(rs.next()) {
 				retrievedItem = new Item();
@@ -227,10 +214,12 @@ public class ItemPostgres implements ItemDao {
 			
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
+			
 		} 
 		
-		return null;
+		return retrievedItem;
 	}
 	
 	//public List

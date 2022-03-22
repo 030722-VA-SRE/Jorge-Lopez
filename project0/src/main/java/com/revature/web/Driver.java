@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
 import com.revature.exceptions.ItemNotFoundException;
@@ -22,7 +24,8 @@ import io.javalin.Javalin;
 public class Driver {
 	
 	static ArrayList<Item> ItemList = new ArrayList<Item>(); 
-	
+	private static Logger log = LogManager.getRootLogger();
+
 	
 	public static void main(String[] args) {
 	     //dbConnection();
@@ -31,7 +34,6 @@ public class Driver {
 	}
 	
 	 public static void basicItemApp() {
-		
 		 ItemService iS = new ItemService();
 		 Javalin app = Javalin.create();
 	        //app.get("/", ctx -> ctx.result("Hello World"));
@@ -42,17 +44,44 @@ public class Driver {
 	        	String hometown = ctx.queryParam("hometown");
 	        	String name = ctx.queryParam("name");
 	        	
+	        	if(name == null) {
+	        		ctx.status(404);
+	        		ctx.result("Ninja with name: "+ name+ "does not exist");
+	        	}
+	        	if(hometown == null) {
+	        		ctx.status(404);
+	        		ctx.result("Village: "+ hometown+ "does not exist");
+	        	}
+	        	if(hometown != null && name == null) {
+	        		List<Item> itemList = iS.searchForItem(hometown);
+	        		ctx.json(itemList);
+	        	} else if (name != null && hometown == null) {
+	        		Item newItem = iS.searchForSecondCriteria(name);
+	        		ctx.json(newItem);
+	        	} else {
+	        		ctx.json(iS.getAllProducts());
+	        	}
+	        	/*
 	        		if(hometown != null && name == null) {
 		        		List<Item> newItem = iS.searchForItem(hometown);
 		        		ctx.json(newItem);
 		        	} else if(name != null && hometown == null) {
 		        		Item nuItem = iS.searchForSecondCriteria(name);
 		        		ctx.json(nuItem);
+		        	} else if (name == null) {
+		        		ctx.status(404);
+		        		ctx.result("Ninja with name: " + name + " does not exist");
+		        		
+		        	} else if (hometown == null) {
+		        		ctx.status(404);
+		        		ctx.result("Village: " + hometown + " does not exist");
 		        	}
 		        	else {
 		        	
 		        		ctx.json(iS.getAllProducts());
 		        	}
+	        	*/
+	        	
 	        	
 	        		
 	        
@@ -67,6 +96,7 @@ public class Driver {
 	        	
 	        	if(itemByID == null ) {
 	        		ctx.status(404);
+	        		ctx.result("Item: " + idNum + " does not exist");
 	        		
 	        	} else {
 	        		ctx.status(200);
@@ -96,7 +126,6 @@ public class Driver {
 	        	String itemid = ctx.pathParam("id");
 	        	Item newitem = ctx.bodyAsClass(Item.class);
 	        	int id = Integer.parseInt(itemid);
-	        	
 	        	
 	        	newitem.setItemID(newitem.getItemID());
 	        	newitem.setDescription(newitem.getDescription());

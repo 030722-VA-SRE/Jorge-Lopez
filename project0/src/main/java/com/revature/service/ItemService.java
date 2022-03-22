@@ -16,12 +16,18 @@ import com.revature.exceptions.ItemNotFoundException;
 
 public class ItemService {
 	public static Logger log = LogManager.getRootLogger();
-	public ItemService() {
-		//super();
-	}
 	
+	private ItemDao itemDao;
+	public ItemService (ItemDao mockDao) {
+		itemDao = mockDao;
+		
+	}
+	public ItemService() {
+		itemDao = new ItemPostgres();
 
-	 ItemDao itemDao = new ItemPostgres();
+	}
+
+	//private ItemDao itemDao;
 
 	public int addItem(Item newItem){
 		
@@ -48,7 +54,8 @@ public class ItemService {
 				throw new ItemNotFoundException();
 			}
 		} catch (ItemNotFoundException e) {
-			log.info("Exception Thrown: Item not found with that ID");
+			log.error("Exception Thrown: Item not found with that ID");
+			//log.error("Appeared in file");
 		}
 		return item;
 		
@@ -71,24 +78,32 @@ public class ItemService {
 	}
 	
 	public List<Item> searchForItem(String hometown) throws ItemNotFoundException {
-		
-		if(hometown == null) {
-			throw new ItemNotFoundException();
+		List<Item> newList = itemDao.getItembyFirstCriteria(hometown);
+		try {
+			if(newList == null) {
+				throw new ItemNotFoundException();
+				
+			}
+		} catch(ItemNotFoundException  e) {
+			log.error("Exception was thrown: Village "+hometown+ " Not Found: Try different village");
 		}
-		return itemDao.getItembyFirstCriteria(hometown);
+		
+		return newList;
 	}
 	
 	public Item searchForSecondCriteria(String name) throws ItemNotFoundException {
+		Item searchedItem = itemDao.getItembyName(name);
 		try {
-			if(name == null) {
+			if(searchedItem == null) {
 				throw new ItemNotFoundException();
 				
 			}
 		} catch (ItemNotFoundException e) {
-			log.info("Exception was thrown: " + "Item not Found");
+			//log.info("Exception was thrown: " + "Item not Found");
+			log.error("Exception was thrown: Item not Found - Must enter non-null string value for name");
 		}
 		
-		return itemDao.getItembyName(name);
+		return searchedItem;
 		
 	}
 	

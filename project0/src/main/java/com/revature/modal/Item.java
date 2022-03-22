@@ -52,11 +52,13 @@ public class Item {
 		this.description = description;
 	}
 	*/
-	public Item(String name,String description) {
+	public Item(int id, String name,String hometown,String description) {
 		this();
 		this.ItemName = name;
-		//this.ItemID=ItemID;
+		this.ItemID=id;
 		this.description = description;
+		this.homeTown = hometown;
+				
 	}
 	@Override
 	public int hashCode() {
