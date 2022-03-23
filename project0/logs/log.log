@@ -6,3 +6,14 @@
 12:09:36.629 [JettyServerThreadPool-20] ERROR  - Exception was thrown: Item not Found
 12:09:41.808 [JettyServerThreadPool-14] ERROR  - Exception was thrown: Item not Found
 12:13:08.187 [JettyServerThreadPool-20] ERROR  - Exception was thrown: Item not Found with name 
+17:07:41.268 [main] ERROR  - Exception Thrown: Item not found with that ID
+17:12:38.442 [main] ERROR  - Exception Thrown: Item not found with that ID
+17:12:38.456 [main] ERROR  - Exception was thrown: Item not Found - Must enter non-null string value for name
+17:16:40.051 [main] ERROR  - Exception Thrown: Item not found with that ID
+17:16:40.066 [main] ERROR  - Exception was thrown: Item not Found - Must enter non-null string value for name
+17:25:08.243 [main] ERROR  - Exception Thrown: Item not found with that ID
+17:25:08.252 [main] ERROR  - Exception was thrown: Item not Found - Must enter non-null string value for name
+17:25:43.212 [main] ERROR  - Exception Thrown: Item not found with that ID
+17:25:43.220 [main] ERROR  - Exception was thrown: Item not Found - Must enter non-null string value for name
+17:27:17.165 [main] ERROR  - Exception Thrown: Item not found with that ID
+17:27:17.172 [main] ERROR  - Exception was thrown: Item not Found - Must enter non-null string value for name

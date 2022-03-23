@@ -11,23 +11,24 @@ import com.revature.modal.Item;
 import com.revature.persistence.ItemDao;
 import com.revature.persistence.ItemPostgres;
 import com.revature.exceptions.ItemNotFoundException;
-//import com.revature.service.*;
+
 
 
 public class ItemService {
 	public static Logger log = LogManager.getRootLogger();
 	
 	private ItemDao itemDao;
+	
 	public ItemService (ItemDao mockDao) {
+		
 		itemDao = mockDao;
 		
 	}
 	public ItemService() {
+		
 		itemDao = new ItemPostgres();
 
 	}
-
-	//private ItemDao itemDao;
 
 	public int addItem(Item newItem){
 		
@@ -80,7 +81,7 @@ public class ItemService {
 	public List<Item> searchForItem(String hometown) throws ItemNotFoundException {
 		List<Item> newList = itemDao.getItembyFirstCriteria(hometown);
 		try {
-			if(newList == null) {
+			if(hometown == null) {
 				throw new ItemNotFoundException();
 				
 			}

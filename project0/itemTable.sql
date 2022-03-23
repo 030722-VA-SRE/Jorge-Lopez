@@ -27,8 +27,11 @@ select * from item where itemid = 1;
 ----- GET: All items -----
 select * from item;
 
---------- GET: Only ninjas from leaf village ------------
-select * from item where hometown  = 'Hidden Leaf Village';
+--------- GET: Only ninjas based on hometown/village given ------------
+select * from item where hometown  = 'Hidden _____ Village';
+
+------------ GET: Only ninjas based on name given ------------
+select * from item where itemname  = 'Ninja name';
 
 --------- POST: Add ninja to database ------------------
 INSERT INTO item (itemname, hometown, itemdescription) VALUES('name', 'Hidden-Blank-Village', 'descibe ninja');
