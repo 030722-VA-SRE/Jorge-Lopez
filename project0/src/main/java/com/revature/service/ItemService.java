@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.revature.modal.Item;
-
 import com.revature.persistence.ItemDao;
 import com.revature.persistence.ItemPostgres;
 import com.revature.exceptions.ItemNotFoundException;
@@ -56,7 +55,6 @@ public class ItemService {
 			}
 		} catch (ItemNotFoundException e) {
 			log.error("Exception Thrown: Item not found with that ID");
-			//log.error("Appeared in file");
 		}
 		return item;
 		
@@ -66,16 +64,11 @@ public class ItemService {
 		
 		if(item!=null) {
 			itemDao.updateItem(item);
-			//System.out.println("After update called in service");
 			return true;
 			
 		}
-		//System.out.println("Outside if: In service class");
 		return false;
-		
-		
-		
-		//return itemDao.updateItem(item);
+				
 	}
 	
 	public List<Item> searchForItem(String hometown) throws ItemNotFoundException {
@@ -100,7 +93,6 @@ public class ItemService {
 				
 			}
 		} catch (ItemNotFoundException e) {
-			//log.info("Exception was thrown: " + "Item not Found");
 			log.error("Exception was thrown: Item not Found - Must enter non-null string value for name");
 		}
 		

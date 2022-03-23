@@ -32,8 +32,7 @@ public class ItemPostgres implements ItemDao {
 				randItemID = rs.getInt("itemID");
 			}
 			
-			
-		}catch (SQLException | IOException except ) {
+		} catch (SQLException | IOException except ) {
 			except.printStackTrace();
 		}
 		
@@ -42,7 +41,6 @@ public class ItemPostgres implements ItemDao {
 
 	@Override
 	public Item getItem(int id) {
-		
 		
 		String sql = "SELECT * from item where itemid = ?";
 		Item itemToRetrieve = null;
@@ -81,12 +79,9 @@ public class ItemPostgres implements ItemDao {
 			
 			ps.setString(1, item.getDescription());
 			ps.setInt(2, item.getItemID());
-			
-			
 			ps.executeUpdate();
 	
 		} catch (SQLException | IOException e) {
-			//System.out.println("in catch  exception");
 			e.printStackTrace();
 			
 		}
@@ -144,7 +139,6 @@ public class ItemPostgres implements ItemDao {
 			
 			
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -167,9 +161,7 @@ public class ItemPostgres implements ItemDao {
 			
 			
 			while(rs.next()) {
-				//System.out.println(rs.getInt("itemid"));
 				item = new Item();
-				
 				item.setItemID(rs.getInt("itemid"));
 				item.setItemName(rs.getString("itemname"));
 				item.setHomeTown(rs.getString("hometown"));
@@ -207,14 +199,10 @@ public class ItemPostgres implements ItemDao {
 				retrievedItem.setHomeTown(rs.getString("hometown"));
 				retrievedItem.setDescription(rs.getString("itemdescription"));
 
-				
 				return retrievedItem;
 			}
 			
-			
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			
 			e.printStackTrace();
 			
 		} 
@@ -222,7 +210,4 @@ public class ItemPostgres implements ItemDao {
 		return retrievedItem;
 	}
 	
-	//public List
-	
-
 }
