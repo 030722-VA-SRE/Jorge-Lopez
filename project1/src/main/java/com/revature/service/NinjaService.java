@@ -26,13 +26,14 @@ public class NinjaService {
 		return ninjaRepo.findAll();
 	}
 	// Adds/Creates new Ninja in Database
+	/*
 	public Ninja addNinja(Ninja newNinja) {
 		
 		return ninjaRepo.save(newNinja);
-	}
+	}*/
 	// Get Ninja based on ID
-	public Ninja getNinjaByID(int ID) {
-		return ninjaRepo.getById(ID);
+	public Ninja getNinjaByID(int ID) throws Exception {
+		return ninjaRepo.findById(ID).orElseThrow(Exception::new);
 		//ninjaRepo.
 	}
 
@@ -44,14 +45,20 @@ public class NinjaService {
 		return ninjaRepo.findByJutsu(jutsu);
 		
 	}
-	public boolean updateNinjaVillage(@Param("id")String id) {
+	public Ninja updateNinjaVillage(int ID, Ninja ninja) throws Exception {
+		//int ID = Integer.parseInt(id);
+		Ninja n = ninjaRepo.findById(ID).orElseThrow(Exception::new);
 		
-		Ninja ninja = new Ninja();
-		if(id.equals(ninja.getId()));
+		ninja.setId(n.getId());
 		
-		ninjaRepo.save(ninja);
+		return ninjaRepo.save(ninja);
 		
-		return true;
+		
+	}
+	public void deleteNinjaByID(int ID) throws Exception {
+		ninjaRepo.findById(ID).orElseThrow(Exception::new);
+		
+		ninjaRepo.deleteById(ID);
 	}
 	
 }

@@ -24,6 +24,8 @@ public class Ninja {
 	private String jutsu;
 	@Column(nullable=false)
 	private String details;
+	@Column(nullable=false)
+	private int price;
 	
 	public int getId() {
 		return id;
@@ -55,14 +57,20 @@ public class Ninja {
 	public void setDetails(String details) {
 		this.details = details;
 	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
 	@Override
 	public String toString() {
 		return "Ninja [id=" + id + ", ninjaName=" + ninjaName + ", village=" + village + ", jutsu=" + jutsu
-				+ ", details=" + details + "]";
+				+ ", details=" + details + ", price=" + price + "]";
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(details, id, jutsu, ninjaName, village);
+		return Objects.hash(details, id, jutsu, ninjaName, price, village);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -74,7 +82,8 @@ public class Ninja {
 			return false;
 		Ninja other = (Ninja) obj;
 		return Objects.equals(details, other.details) && id == other.id && Objects.equals(jutsu, other.jutsu)
-				&& Objects.equals(ninjaName, other.ninjaName) && Objects.equals(village, other.village);
+				&& Objects.equals(ninjaName, other.ninjaName) && price == other.price
+				&& Objects.equals(village, other.village);
 	}
 	
 	

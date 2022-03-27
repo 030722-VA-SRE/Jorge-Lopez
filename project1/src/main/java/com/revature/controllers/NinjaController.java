@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,17 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.modals.Ninja;
 import com.revature.service.NinjaService;
+import com.revature.service.UserService;
 
 @RestController
 @RequestMapping("/ninjas")
 public class NinjaController {
 
 	private NinjaService nS;
-	
+	private UserService uS;
 	@Autowired
-	public NinjaController(NinjaService nS) {
+	public NinjaController(NinjaService nS,UserService uS) {
 		//super();
 		this.nS = nS;
+		this.uS=uS;
 	}
 
 //	@RequestMapping(method = RequestMethod.GET, value = "/ninjas")
@@ -45,18 +49,22 @@ public class NinjaController {
 	@PostMapping
 	public ResponseEntity<String> addNinja(@RequestBody Ninja newNinja){
 		
-		nS.addNinja(newNinja);
+		uS.addNinja(newNinja);
 		return new ResponseEntity<>("Ninja added to database!",HttpStatus.OK);
 	}
-	//TODO: Needs work
 	@GetMapping("/{id}")
-	public ResponseEntity<Ninja> getNinjaById(@PathVariable("id") int ninjaid){
+	public ResponseEntity<Ninja> getNinjaById(@PathVariable("id") int ninjaid) throws Exception{
+		
 		
 		return new ResponseEntity<>(nS.getNinjaByID(ninjaid), HttpStatus.OK);
 		
 	}
-	//TODO UPDATE
-	public void updateNinja() {
-		
+	@PutMapping("/{id}")
+	public ResponseEntity<Ninja> updateNinja(@PathVariable("id") int id,@RequestBody Ninja ninja) throws Exception {
+		return new ResponseEntity<>(nS.updateNinjaVillage(id, ninja),HttpStatus.OK);
+	}
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteNinja(@PathVariable("id") int id){
+		return new ResponseEntity<>("Ninja was deleted successfully",HttpStatus.ACCEPTED);
 	}
 }
