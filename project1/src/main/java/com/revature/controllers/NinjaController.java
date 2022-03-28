@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.modals.Ninja;
+import com.revature.modals.Users;
 import com.revature.service.NinjaService;
 import com.revature.service.UserService;
 
@@ -48,8 +49,8 @@ public class NinjaController {
 	}
 	@PostMapping
 	public ResponseEntity<String> addNinja(@RequestBody Ninja newNinja){
-		
-		uS.addNinja(newNinja);
+		Users user = new Users();
+		uS.addNinja(newNinja,user);
 		return new ResponseEntity<>("Ninja added to database!",HttpStatus.OK);
 	}
 	@GetMapping("/{id}")

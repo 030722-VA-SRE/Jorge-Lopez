@@ -24,6 +24,8 @@ public class AuthController {
 		if(principal == null) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
+		
+		// Add token or session cookie
 		return null;
 		
 	}

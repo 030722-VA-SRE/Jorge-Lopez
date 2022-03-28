@@ -1,7 +1,8 @@
 package com.revature.service;
 
 import java.util.List;
-import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -45,6 +46,7 @@ public class NinjaService {
 		return ninjaRepo.findByJutsu(jutsu);
 		
 	}
+	@Transactional
 	public Ninja updateNinjaVillage(int ID, Ninja ninja) throws Exception {
 		//int ID = Integer.parseInt(id);
 		Ninja n = ninjaRepo.findById(ID).orElseThrow(Exception::new);
@@ -53,8 +55,8 @@ public class NinjaService {
 		
 		return ninjaRepo.save(ninja);
 		
-		
 	}
+	@Transactional
 	public void deleteNinjaByID(int ID) throws Exception {
 		ninjaRepo.findById(ID).orElseThrow(Exception::new);
 		

@@ -24,11 +24,13 @@ public class AuthService {
 		
 		Users newUser = userRepo.findUsersByuserName(username);
 		
-		if(newUser == null || !password.equals(newUser.getPassWord())) {
+		if(newUser == null || !password.equals(newUser.getPassWord()) && !role.equals(newUser.getRole())) {
 			return null;
 		}
 		return new UserDTO(newUser);
 		
 	}
+	
+	//
 	
 }
