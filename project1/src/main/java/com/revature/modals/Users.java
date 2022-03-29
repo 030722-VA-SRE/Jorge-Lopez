@@ -21,6 +21,7 @@ public class Users {
 	private String userName;
 	@Column(nullable=false)
 	private String passWord;
+	@Column(nullable=false)
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	

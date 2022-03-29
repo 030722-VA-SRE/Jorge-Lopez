@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.exceptions.NinjaNotFoundException;
 import com.revature.modals.Ninja;
 import com.revature.modals.Users;
 import com.revature.service.NinjaService;
@@ -36,7 +37,7 @@ public class NinjaController {
 //	@RequestMapping(method = RequestMethod.GET, value = "/ninjas")
 //	@ResponseBody
 	@GetMapping
-	public ResponseEntity<List<Ninja>> getAllNinjas(@RequestParam(name="village", required=false) String village, @RequestParam(required=false) String jutsu){
+	public ResponseEntity<List<Ninja>> getAllNinjas(@RequestParam(name="village", required=false) String village, @RequestParam(required=false) String jutsu) throws NinjaNotFoundException{
 		
 		if(village != null && jutsu == null) {
 			return new ResponseEntity<>(nS.getNinjasByVillage(village),HttpStatus.OK);

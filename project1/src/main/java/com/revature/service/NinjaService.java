@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import com.revature.exceptions.NinjaNotFoundException;
 import com.revature.modals.Ninja;
 import com.revature.repositories.NinjaRepository;
 
@@ -33,12 +34,16 @@ public class NinjaService {
 		return ninjaRepo.save(newNinja);
 	}*/
 	// Get Ninja based on ID
-	public Ninja getNinjaByID(int ID) throws Exception {
-		return ninjaRepo.findById(ID).orElseThrow(Exception::new);
+	public Ninja getNinjaByID(int ID) throws NinjaNotFoundException {
+		return ninjaRepo.findById(ID).orElseThrow(NinjaNotFoundException::new);
 		//ninjaRepo.
 	}
 
-	public List<Ninja> getNinjasByVillage(@Param("village") String village){
+	public List<Ninja> getNinjasByVillage(@Param("village") String village) throws NinjaNotFoundException{
+		if(village == null) {
+			throw new NinjaNotFoundException();
+		}
+		
 		return ninjaRepo.findByVillage(village);
 	
 	}
@@ -47,9 +52,9 @@ public class NinjaService {
 		
 	}
 	@Transactional
-	public Ninja updateNinjaVillage(int ID, Ninja ninja) throws Exception {
+	public Ninja updateNinjaVillage(int ID, Ninja ninja) throws NinjaNotFoundException {
 		//int ID = Integer.parseInt(id);
-		Ninja n = ninjaRepo.findById(ID).orElseThrow(Exception::new);
+		Ninja n = ninjaRepo.findById(ID).orElseThrow(NinjaNotFoundException::new);
 		
 		ninja.setId(n.getId());
 		
@@ -57,8 +62,8 @@ public class NinjaService {
 		
 	}
 	@Transactional
-	public void deleteNinjaByID(int ID) throws Exception {
-		ninjaRepo.findById(ID).orElseThrow(Exception::new);
+	public void deleteNinjaByID(int ID) throws NinjaNotFoundException {
+		ninjaRepo.findById(ID).orElseThrow(NinjaNotFoundException::new);
 		
 		ninjaRepo.deleteById(ID);
 	}
