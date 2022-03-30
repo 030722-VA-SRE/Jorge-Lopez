@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dto.UserDTO;
+import com.revature.exceptions.UserNotFoundException;
 import com.revature.modals.Role;
 import com.revature.service.AuthService;
 
@@ -26,20 +27,20 @@ public class AuthController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<UserDTO> login(@RequestParam("username") String username,@RequestParam("password") String password, @RequestParam("role") Role role) throws NoSuchAlgorithmException{
+	public ResponseEntity<String> login(@RequestParam("username") String username,@RequestParam("password") String password, @RequestParam("role") Role role) throws NoSuchAlgorithmException, UserNotFoundException{
 		
-		UserDTO principal = authService.login(username, password,role);
+		String token = authService.login(username, password,role);
 		
-		if(principal == null) {
+		if(token == null) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 		HttpHeaders header = new HttpHeaders();
 		// Add token or session cookie
 		
-		String token = authService.generateToken(principal);
+		//String token = authService.login(user);
 		
 		header.set("Authorization", token);
-		return new ResponseEntity<>(principal,header,HttpStatus.ACCEPTED);
+		return new ResponseEntity<>("Login Successful.",header,HttpStatus.OK);
 		
 	}
 }

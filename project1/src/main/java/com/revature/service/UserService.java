@@ -46,11 +46,9 @@ public class UserService {
 	}
 	
 	//Employee can ADD Ninja to database 
-	public Ninja addNinja(Ninja newNinja, Users user) {
+	public Ninja addNinja(Ninja newNinja) {
 		//check to see if user role is EMPLOYEE
-		if(user.equals(userRepo.findUsersByRole(user.getRole()))) {
-			System.out.println("User is: " + user.getRole());
-		}
+		
 		/*
 		if(user.getRole().equals(userRepo.findUsersByRole(employee))) {
 			

@@ -28,11 +28,11 @@ public class NinjaService {
 		return ninjaRepo.findAll();
 	}
 	// Adds/Creates new Ninja in Database
-	/*
+	
 	public Ninja addNinja(Ninja newNinja) {
 		
 		return ninjaRepo.save(newNinja);
-	}*/
+	}
 	// Get Ninja based on ID
 	public Ninja getNinjaByID(int ID) throws NinjaNotFoundException {
 		return ninjaRepo.findById(ID).orElseThrow(NinjaNotFoundException::new);

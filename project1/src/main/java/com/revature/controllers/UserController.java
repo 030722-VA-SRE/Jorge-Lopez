@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.modals.Users;
+import com.revature.service.AuthService;
 import com.revature.service.UserService;
 
 @RestController
@@ -21,11 +22,13 @@ public class UserController {
 	
 	
 	private UserService userService;
+	private AuthService authService;
 	
 	@Autowired
-	public UserController(UserService userService) {
+	public UserController(UserService userService, AuthService authService) {
 		super();
 		this.userService = userService;
+		this.authService = authService;
 		
 	}
 	@PostMapping
@@ -40,6 +43,7 @@ public class UserController {
 	}
 	
 	
+	//Pass in token using @RequestHeader
 	
 	
 
