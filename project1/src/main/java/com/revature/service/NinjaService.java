@@ -4,10 +4,13 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import com.revature.controllers.NinjaController;
 import com.revature.exceptions.NinjaNotFoundException;
 import com.revature.modals.Ninja;
 import com.revature.repositories.NinjaRepository;
@@ -17,6 +20,8 @@ public class NinjaService {
 
 	
 	private NinjaRepository ninjaRepo;
+	private Logger log = LoggerFactory.getLogger(NinjaService.class);
+
 	
 	@Autowired
 	public NinjaService(NinjaRepository ninjaRepo) {
@@ -41,7 +46,9 @@ public class NinjaService {
 
 	public List<Ninja> getNinjasByVillage(@Param("village") String village) throws NinjaNotFoundException{
 		if(village == null) {
+			log.error("Village not found: " + village);
 			throw new NinjaNotFoundException();
+			
 		}
 		
 		return ninjaRepo.findByVillage(village);
@@ -63,8 +70,11 @@ public class NinjaService {
 	}
 	@Transactional
 	public void deleteNinjaByID(int ID) throws NinjaNotFoundException {
+		try {
 		ninjaRepo.findById(ID).orElseThrow(NinjaNotFoundException::new);
-		
+		} catch(NinjaNotFoundException ninja) {
+			log.error("Ninja not found with that ID: " + ID);
+		}
 		ninjaRepo.deleteById(ID);
 	}
 	

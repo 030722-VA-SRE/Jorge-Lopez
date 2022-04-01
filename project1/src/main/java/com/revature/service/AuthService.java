@@ -52,11 +52,14 @@ public class AuthService {
 		Users newUser = userRepo.findUsersByuserName(username);
 		hashedPassword = hashingAlgo(password);
 		if(newUser == null || !newUser.getPassWord().equals(password) && !newUser.getRole().equals(role)) {
+			LOG.error("Username did not match: " + username);
 			throw new UserNotFoundException();
 			// LOG: Login failed
+			
 		}
 		// LOG: login successful
 		String token = newUser.getUserID() + ":" + newUser.getRole().toString();
+		LOG.info("Login for user: " + newUser.getUserName() + " was successful");
 		return token;
 	}
 	
@@ -82,8 +85,8 @@ public class AuthService {
 		
 		return userID + "::" + role;
 	}*/
-	/*
-	public void verifyCustomerToken(String token) throws UserNotFoundException {
+	
+	public boolean verifyCustomerToken(String token) throws UserNotFoundException {
 		if(token == null) {
 			throw new UserNotFoundException();
 		}
@@ -98,16 +101,16 @@ public class AuthService {
 			throw new UserNotFoundException();
 		}
 		
-		LOG.info("Token verified successfully");
-		
-	}*/
+		LOG.info("Token verified successfully: " + principal.getRole());
+		return true;
+	}
 	public boolean verifyEmployee(String token) throws UserNotFoundException {
 		if(token == null) {
 			throw new UserNotFoundException();
 		}
 		
 		String [] tokenizedToken = token.split(":");
-		Users principal = userRepo.findById(Integer.valueOf(tokenizedToken[0])).orElse(null);
+		Users principal = userRepo.findById(Integer.valueOf(tokenizedToken[0])).orElseThrow(UserNotFoundException::new);
 		//int id = Integer.parseInt(tokenizedToken[1]);
 		
 		if(principal == null || !principal.getRole().toString().equals(tokenizedToken[1]) || !principal.getRole().toString().equals("EMPLOYEE")) {

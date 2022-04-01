@@ -45,15 +45,20 @@ public class NinjaController {
 //	@RequestMapping(method = RequestMethod.GET, value = "/ninjas")
 //	@ResponseBody
 	@GetMapping
-	public ResponseEntity<List<Ninja>> getAllNinjas(@RequestParam(name="village", required=false) String village, @RequestParam(required=false) String jutsu) throws NinjaNotFoundException{
-		if(village != null && jutsu == null) {
-			return new ResponseEntity<>(nS.getNinjasByVillage(village),HttpStatus.OK);
-		} else if (village == null && jutsu != null) {
+	public ResponseEntity<List<Ninja>> getAllNinjas(@RequestParam(name="village", required=false) String village, @RequestParam(required=false) String jutsu,@RequestHeader(value="Authorization",required=true) String token) throws NinjaNotFoundException, UserNotFoundException{
+		if(aS.verifyCustomerToken(token)) {
+			if(village != null && jutsu == null) {
+				return new ResponseEntity<>(nS.getNinjasByVillage(village),HttpStatus.OK);
+			} else if (village == null && jutsu != null) {
 			//return new Entity<>(nS.getNinjaByJutsu(jutsu),HttpStatus.OK);
-			return new ResponseEntity<>(nS.getNinjaByJutsu(jutsu),HttpStatus.OK);
-		} else {
+				return new ResponseEntity<>(nS.getNinjaByJutsu(jutsu),HttpStatus.OK);
+			} else {
 			return new ResponseEntity<>(nS.getAllNinjas(),HttpStatus.OK);
-		}
+			}
+		} 
+		log.error("Must be customer to view available items");
+		return null;
+
 	}
 	
 	//Adds Ninja to DB ONLY IF ROLE == EMPLOYEE
@@ -62,14 +67,13 @@ public class NinjaController {
 		//Users user = new Users();
 		try {
 			
-			if(aS.verifyEmployee(token)) {
-				nS.addNinja(newNinja);
+			if(aS.verifyEmployee(token)==true) {
+				uS.addNinja(newNinja);
 				return new ResponseEntity<>("Ninja added to database!",HttpStatus.OK);
 			}
-		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			log.info("Unable to add Ninja to Database");
-			e.printStackTrace();
+		} catch (UserNotFoundException e) {			
+			log.error("Unable to add Ninja to Database: Must have proper authorization" );
+			//log.error(null, "Error", e.printStackTrace());
 		}
 		
 		
@@ -100,6 +104,7 @@ public class NinjaController {
 				return new ResponseEntity<>("Ninja was deleted successfully",HttpStatus.ACCEPTED);
 			}
 		} catch (UserNotFoundException | NinjaNotFoundException e) {
+			
 			e.printStackTrace();
 		}
 		
