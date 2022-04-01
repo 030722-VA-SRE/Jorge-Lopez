@@ -3,9 +3,14 @@ package com.revature.service;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.exceptions.NinjaNotFoundException;
 import com.revature.modals.CustomerTransaction;
 import com.revature.modals.Ninja;
 import com.revature.modals.Users;
@@ -19,17 +24,17 @@ public class UserService {
 	private UserRepository userRepo;
 	private NinjaRepository ninjaRepo;
 	private AuthService authService;
-	private TransactionRepository transactionRepo;
-	//@Enumerated()
+	
+	private static Logger log = LoggerFactory.getLogger(UserService.class);	//@Enumerated()
 	//Role employee = Role.EMPLOYEE;
 	
 	@Autowired
-	public UserService(UserRepository userRepo,NinjaRepository ninjaRepo,AuthService authService,TransactionRepository transactionRepo) {
+	public UserService(UserRepository userRepo,NinjaRepository ninjaRepo,
+			AuthService authService){
 		super();
 		this.userRepo = userRepo;
 		this.ninjaRepo=ninjaRepo;
 		this.authService = authService;
-		this.transactionRepo = transactionRepo;
 	}
 	//Create customer account
 	public Users addUser(Users customer) throws NoSuchAlgorithmException {
@@ -47,43 +52,40 @@ public class UserService {
 		return userRepo.findAll();	
 	}
 	
-	//Employee can ADD Ninja to database (item shop)
-	public Ninja addNinja(Ninja newNinja) {
-		
-		return ninjaRepo.save(newNinja);
-	}
 	
-	//Employee can DELETE Ninja from database (item shop)
-	public boolean deleteNinjaByID(int ID,Users employee) throws Exception {
-		if(employee.equals(userRepo.findUsersByRole(employee.getRole()))){
-			ninjaRepo.findById(ID).orElseThrow(Exception::new);
-			ninjaRepo.deleteById(ID);
-			return true;
-		}
-		
-		return false;
-	}
 	
 	//TODO:: Customer can view items purchased
-	public List<CustomerTransaction> viewNinjasPurchased(int cust_id) {
-		return transactionRepo.findByUser(cust_id);
+	
+	/*public List<CustomerTransaction> viewNinjasPurchased(int cust_id) {
+		return transactionRepo.findByuser(cust_id);
 		//return null;
 	}
 	//TODO:: Customer must be able to purchase item
-	public boolean purchaseNinja(int ninja_id) {
-		//get ninja from ninja table by ID 
-		
+	@Transactional
+	public boolean purchaseNinja(Ninja ninja,Users customer) throws NinjaNotFoundException {
+		//check if user role == customer 
+		if(customer.equals(userRepo.findUsersByRole(customer.getRole()))) {
+			//check by ID: if ninja is in ninja table 
+			if(ninja.equals(ninjaRepo.findById(ninja.getId()))) {
+				//store ninja in object 
+				Ninja purchasedNinja = ninjaRepo.findById(ninja.getId()).orElseThrow(NinjaNotFoundException::new);
+				//newNinja object is passed into transactionRepo.save()
+				transactionRepo.save(purchasedNinja);
+				//log.tra
+				log.info("Ninja saved to transaction table");
+				//remove ninja from ninja table
+				ninjaRepo.delete(ninja);
+				log.info("Ninja deleted from ninja table");
+
+				log.info("Ninja was properly purchased");
+				return true;
+				
+			}
+		}
 		//update rows from ninja table
-		
-		//store ninja in object 
-		
-		//newNinja object is passed into transactionRepo.save()
 		return false;
-	}
-	//TODO: Customer can view ALL AVAILABLE Items
-	public List<Ninja> availableNinjas(){
-		return ninjaRepo.findAll();
-	}
+	}*/
+	
 
 	
 }

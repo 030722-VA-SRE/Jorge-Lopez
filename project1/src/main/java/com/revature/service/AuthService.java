@@ -97,7 +97,7 @@ public class AuthService {
 		
 		if(principal == null || !principal.getRole().toString().equals(tokenizedToken[1]) || !principal.getRole().toString().equals("CUSTOMER")) {
 			System.out.println("Must be a customer!" + principal.getRole().toString());
-
+			LOG.info("User not a Customer");
 			throw new UserNotFoundException();
 		}
 		
@@ -117,7 +117,6 @@ public class AuthService {
 			System.out.println("Must be an employee!" + principal.getRole().toString());
 			LOG.error("Unauthorized member: " + principal.getUserID() + "is not an employee");
 			throw new UserNotFoundException();
-			//return false;
 			
 		}
 		

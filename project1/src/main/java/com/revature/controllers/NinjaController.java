@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -30,22 +31,19 @@ import com.revature.service.UserService;
 public class NinjaController {
 
 	private NinjaService nS;
-	private UserService uS;
 	private AuthService aS;
 	private Logger log = LoggerFactory.getLogger(NinjaController.class);
 	
 	@Autowired
-	public NinjaController(NinjaService nS,UserService uS,AuthService aS) {
+	public NinjaController(NinjaService nS,AuthService aS) {
 		//super();
 		this.nS = nS;
-		this.uS=uS;
 		this.aS=aS;
 	}
-
-//	@RequestMapping(method = RequestMethod.GET, value = "/ninjas")
-//	@ResponseBody
+	// CUSTOMER view available items: Filter by -> village, jutsu
 	@GetMapping
 	public ResponseEntity<List<Ninja>> getAllNinjas(@RequestParam(name="village", required=false) String village, @RequestParam(required=false) String jutsu,@RequestHeader(value="Authorization",required=true) String token) throws NinjaNotFoundException, UserNotFoundException{
+		List<Ninja> emptyList = new ArrayList<>();
 		if(aS.verifyCustomerToken(token)) {
 			if(village != null && jutsu == null) {
 				return new ResponseEntity<>(nS.getNinjasByVillage(village),HttpStatus.OK);
@@ -57,7 +55,7 @@ public class NinjaController {
 			}
 		} 
 		log.error("Must be customer to view available items");
-		return null;
+		return new ResponseEntity<>(emptyList,HttpStatus.FORBIDDEN);
 
 	}
 	
@@ -68,7 +66,7 @@ public class NinjaController {
 		try {
 			
 			if(aS.verifyEmployee(token)==true) {
-				uS.addNinja(newNinja);
+				nS.addNinja(newNinja);
 				return new ResponseEntity<>("Ninja added to database!",HttpStatus.OK);
 			}
 		} catch (UserNotFoundException e) {			
@@ -79,6 +77,7 @@ public class NinjaController {
 		
 		return new ResponseEntity<>("Ninja can't be added: Need proper permissions",HttpStatus.OK);
 	}
+	// CUSTOMER get Ninjas based off ID
 	@GetMapping("/{id}")
 	public ResponseEntity<Ninja> getNinjaById(@PathVariable("id") int ninjaid) throws Exception{
 		
@@ -86,6 +85,7 @@ public class NinjaController {
 		return new ResponseEntity<>(nS.getNinjaByID(ninjaid), HttpStatus.OK);
 		
 	}
+	//EMPLOYEE: ONLY person to edit information
 	@PutMapping("/{id}")
 	public ResponseEntity<Ninja> updateNinja(@PathVariable("id") int id,@RequestBody Ninja ninja, @RequestHeader(value="Authorization", required=true) String token) throws Exception {
 		if(aS.verifyEmployee(token)) {
@@ -95,7 +95,7 @@ public class NinjaController {
 		return null;
 	}
 	
-	//Adds Ninja to DB ONLY IF ROLE == EMPLOYEE
+	//DELETE Ninja to DB ONLY IF ROLE == EMPLOYEE
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteNinja(@PathVariable("id") int id, @RequestHeader(value = "Authorization", required=true) String token){
 		try {
@@ -110,4 +110,6 @@ public class NinjaController {
 		
 		return new ResponseEntity<>("Unauthorized to perform this action!",HttpStatus.ACCEPTED);
 	}
+	
+	
 }
