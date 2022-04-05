@@ -92,7 +92,7 @@ public class NinjaController {
 			return new ResponseEntity<>(nS.updateNinjaVillage(id, ninja),HttpStatus.OK);
 			
 		}
-		return null;
+		return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
 	}
 	
 	//DELETE Ninja to DB ONLY IF ROLE == EMPLOYEE

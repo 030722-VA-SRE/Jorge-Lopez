@@ -66,7 +66,7 @@ public class NinjaService {
 		Ninja n = ninjaRepo.findById(ID).orElseThrow(NinjaNotFoundException::new);
 		
 		ninja.setId(n.getId());
-		ninja.setDetails(n.getDetails());
+		//ninja.setDetails(n.getDetails());
 		
 		return ninjaRepo.save(ninja);
 		
