@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.revature.modals.Role;
 import com.revature.modals.Users;
 import com.revature.repositories.UserRepository;
+import com.revature.service.AuthService;
 import com.revature.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,6 +26,8 @@ public class UserServiceTest {
 	
 	@InjectMocks
 	UserService userService;
+	@InjectMocks
+	AuthService authServ;
 	
 	
 	
@@ -45,8 +48,10 @@ public class UserServiceTest {
 	@Test
 	void addUserTest() throws NoSuchAlgorithmException {
 		Role employee = Role.EMPLOYEE;
-
-		Users u = new Users(1,"username","password",employee);
+		String hashedPW = authServ.hashingAlgo("password");
+		//Users u = null ;
+		//u.setPassWord(hashedPW);
+		Users u = new Users(1,"username",hashedPW,employee);
 		Mockito.when(userRepo.save(u)).thenReturn(u);
 		assertEquals(userService.addUser(u),u);
 

@@ -88,6 +88,13 @@ public class Users {
 		this.passWord = passWord;
 		this.role = role;
 	}
+	public Users(String userName,String passWord, Role role) {
+		super();
+		
+		this.userName = userName;
+		this.passWord = passWord;
+		this.role = role;
+	}
 	
 	
 }

@@ -22,7 +22,7 @@ import com.revature.repositories.UserRepository;
 public class UserService {
 	
 	private UserRepository userRepo;
-	private NinjaRepository ninjaRepo;
+	//private NinjaRepository ninjaRepo;
 	private AuthService authService;
 	
 	private static Logger log = LoggerFactory.getLogger(UserService.class);	//@Enumerated()
@@ -33,7 +33,7 @@ public class UserService {
 			AuthService authService){
 		super();
 		this.userRepo = userRepo;
-		this.ninjaRepo=ninjaRepo;
+		//this.ninjaRepo=ninjaRepo;
 		this.authService = authService;
 	}
 	//Create customer account
@@ -41,13 +41,15 @@ public class UserService {
 		String passwordEntered = null;
 		String hashedPassword;
 		if(customer.equals(userRepo.findUsersByuserName(customer.getUserName()))) {
-			System.out.println("User already exists");
+			//System.out.println("User already exists");
+			log.info(customer.getUserName() + "already exists!");
 		}
 		passwordEntered = customer.getPassWord();
 		hashedPassword = authService.hashingAlgo(passwordEntered);
 		customer.setPassWord(hashedPassword);
 		return userRepo.save(customer);
 	}
+	//Get all users in User table
 	public List<Users> getUsers(){
 		return userRepo.findAll();	
 	}

@@ -51,7 +51,7 @@ public class AuthService {
 		String hashedPassword;
 		Users newUser = userRepo.findUsersByuserName(username);
 		hashedPassword = hashingAlgo(password);
-		if(newUser == null || !newUser.getPassWord().equals(password) && !newUser.getRole().equals(role)) {
+		if(newUser == null || !newUser.getPassWord().equals(hashedPassword) && !newUser.getRole().equals(role)) {
 			LOG.error("Username did not match: " + username);
 			throw new UserNotFoundException();
 			// LOG: Login failed
@@ -62,7 +62,20 @@ public class AuthService {
 		LOG.info("Login for user: " + newUser.getUserName() + " was successful");
 		return token;
 	}
-	
+	public boolean register(String username, String password, Role role) throws NoSuchAlgorithmException, UserNotFoundException {
+		String hashPassword;
+		hashPassword= hashingAlgo(password);
+		Users newUser = new Users(username,hashPassword,role);
+		if(newUser == null || username != newUser.getUserName()) {
+			LOG.info("User with username: "+ username + "already exists!");
+			throw new UserNotFoundException();
+		}
+		userRepo.save(newUser);
+		String token = newUser.getUserID()+ ":"+ newUser.getRole().toString();
+		//return token;
+		return true;
+		
+	}
 	//
 	public Users getUserByRole(Users user) {
 		Users u = userRepo.findUsersByRole(user.getRole());
@@ -70,7 +83,6 @@ public class AuthService {
 		if(!user.equals(u.getRole())) {
 			return null;
 		}
-		
 		return u;
 		
 	}

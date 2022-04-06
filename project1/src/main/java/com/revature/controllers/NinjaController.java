@@ -78,7 +78,7 @@ public class NinjaController {
 			//log.error(null, "Error", e.printStackTrace());
 		}
 		
-		
+	
 		return new ResponseEntity<>("Ninja can't be added: Need proper permissions",HttpStatus.OK);
 	}
 	// CUSTOMER get Ninjas based off ID
