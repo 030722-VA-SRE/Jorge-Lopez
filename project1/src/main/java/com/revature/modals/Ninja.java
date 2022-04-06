@@ -85,6 +85,15 @@ public class Ninja {
 				&& Objects.equals(ninjaName, other.ninjaName) && price == other.price
 				&& Objects.equals(village, other.village);
 	}
+	public Ninja(int id, String ninjaName, String village, String jutsu, String details, int price) {
+		super();
+		this.id = id;
+		this.ninjaName = ninjaName;
+		this.village = village;
+		this.jutsu = jutsu;
+		this.details = details;
+		this.price = price;
+	}
 	
 	
 	

@@ -27,7 +27,7 @@ public class AuthController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<String> login(@RequestParam("username") String username,@RequestParam("password") String password, @RequestParam("role") Role role) throws NoSuchAlgorithmException, UserNotFoundException{
+	public ResponseEntity<String> login(@RequestParam(name="username") String username, @RequestParam(name="password") String password, @RequestParam(name="role") Role role) throws NoSuchAlgorithmException, UserNotFoundException{
 		
 		String token = authService.login(username, password,role);
 		

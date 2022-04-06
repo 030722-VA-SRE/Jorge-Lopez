@@ -2,7 +2,9 @@ package com.revature.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,7 @@ public class NinjaController {
 	public ResponseEntity<List<Ninja>> getAllNinjas(@RequestParam(name="village", required=false) String village, @RequestParam(required=false) String jutsu,@RequestHeader(value="Authorization",required=true) String token) throws NinjaNotFoundException, UserNotFoundException{
 		List<Ninja> emptyList = new ArrayList<>();
 		if(aS.verifyCustomerToken(token)) {
+			MDC.put("Request ID: ", UUID.randomUUID().toString());
 			if(village != null && jutsu == null) {
 				return new ResponseEntity<>(nS.getNinjasByVillage(village),HttpStatus.OK);
 			} else if (village == null && jutsu != null) {
@@ -56,7 +59,6 @@ public class NinjaController {
 		} 
 		log.error("Must be customer to view available items");
 		return new ResponseEntity<>(emptyList,HttpStatus.FORBIDDEN);
-
 	}
 	
 	//Adds Ninja to DB ONLY IF ROLE == EMPLOYEE
@@ -66,6 +68,8 @@ public class NinjaController {
 		try {
 			
 			if(aS.verifyEmployee(token)==true) {
+				MDC.put("Request ID: ", UUID.randomUUID().toString());
+				MDC.put("User:Role", token);
 				nS.addNinja(newNinja);
 				return new ResponseEntity<>("Ninja added to database!",HttpStatus.OK);
 			}
@@ -89,9 +93,12 @@ public class NinjaController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Ninja> updateNinja(@PathVariable("id") int id,@RequestBody Ninja ninja, @RequestHeader(value="Authorization", required=true) String token) throws Exception {
 		if(aS.verifyEmployee(token)) {
+			MDC.put("Request ID: ", UUID.randomUUID().toString());
+			
 			return new ResponseEntity<>(nS.updateNinjaVillage(id, ninja),HttpStatus.OK);
 			
 		}
+		MDC.put("USER:ROLE", token);
 		return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
 	}
 	
@@ -100,6 +107,7 @@ public class NinjaController {
 	public ResponseEntity<String> deleteNinja(@PathVariable("id") int id, @RequestHeader(value = "Authorization", required=true) String token){
 		try {
 			if(aS.verifyEmployee(token)) {
+				MDC.put("Request ID: ", UUID.randomUUID().toString());
 				nS.deleteNinjaByID(id);
 				return new ResponseEntity<>("Ninja was deleted successfully",HttpStatus.ACCEPTED);
 			}
@@ -107,7 +115,8 @@ public class NinjaController {
 			
 			e.printStackTrace();
 		}
-		
+		MDC.put("USER:ROLE", token);
+
 		return new ResponseEntity<>("Unauthorized to perform this action!",HttpStatus.ACCEPTED);
 	}
 	

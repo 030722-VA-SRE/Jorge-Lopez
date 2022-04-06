@@ -19,6 +19,7 @@ public class Users {
 	private int userID;
 	@Column(unique=true, nullable=false)
 	private String userName;
+	
 	@Column(nullable=false)
 	private String passWord;
 	@Column(nullable=false)
@@ -79,6 +80,13 @@ public class Users {
 		Users other = (Users) obj;
 		return Objects.equals(passWord, other.passWord) && role == other.role && userID == other.userID
 				&& Objects.equals(userName, other.userName);
+	}
+	public Users(int userID, String userName, String passWord, Role role) {
+		super();
+		this.userID = userID;
+		this.userName = userName;
+		this.passWord = passWord;
+		this.role = role;
 	}
 	
 	
