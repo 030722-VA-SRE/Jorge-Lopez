@@ -47,11 +47,14 @@ public class NinjaController {
 	public ResponseEntity<List<Ninja>> getAllNinjas(@RequestParam(name="village", required=false) String village, @RequestParam(required=false) String jutsu,@RequestHeader(value="Authorization",required=true) String token) throws NinjaNotFoundException, UserNotFoundException{
 		List<Ninja> emptyList = new ArrayList<>();
 		if(aS.verifyCustomerToken(token)) {
+			log.debug("Verifying: " + token + "for proper authorization");
 			MDC.put("Request ID: ", UUID.randomUUID().toString());
 			if(village != null && jutsu == null) {
+				//log.
 				return new ResponseEntity<>(nS.getNinjasByVillage(village),HttpStatus.OK);
 			} else if (village == null && jutsu != null) {
 			//return new Entity<>(nS.getNinjaByJutsu(jutsu),HttpStatus.OK);
+				log.info(token+"requested ninjas by jutsu");
 				return new ResponseEntity<>(nS.getNinjaByJutsu(jutsu),HttpStatus.OK);
 			} else {
 			return new ResponseEntity<>(nS.getAllNinjas(),HttpStatus.OK);
@@ -70,10 +73,12 @@ public class NinjaController {
 			if(aS.verifyEmployee(token)==true) {
 				MDC.put("Request ID: ", UUID.randomUUID().toString());
 				MDC.put("User:Role", token);
+				log.debug("Reuest to add ninja was made by: " + token);
 				nS.addNinja(newNinja);
 				return new ResponseEntity<>("Ninja added to database!",HttpStatus.OK);
 			}
 		} catch (UserNotFoundException e) {			
+			log.warn("Must have proper authorization" + token);
 			log.error("Unable to add Ninja to Database: Must have proper authorization" );
 			//log.error(null, "Error", e.printStackTrace());
 		}
@@ -93,6 +98,7 @@ public class NinjaController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Ninja> updateNinja(@PathVariable("id") int id,@RequestBody Ninja ninja, @RequestHeader(value="Authorization", required=true) String token) throws Exception {
 		if(aS.verifyEmployee(token)) {
+			log.debug("Verify request made by: " + token);
 			MDC.put("Request ID: ", UUID.randomUUID().toString());
 			
 			return new ResponseEntity<>(nS.updateNinjaVillage(id, ninja),HttpStatus.OK);

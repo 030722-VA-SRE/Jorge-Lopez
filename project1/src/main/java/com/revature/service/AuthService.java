@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.exceptions.UserAlreadyExistsException;
 import com.revature.exceptions.UserNotFoundException;
 import com.revature.modals.Role;
 import com.revature.modals.Users;
@@ -51,6 +52,7 @@ public class AuthService {
 		String hashedPassword;
 		Users newUser = userRepo.findUsersByuserName(username);
 		hashedPassword = hashingAlgo(password);
+		LOG.info("Password was hashed using secure algorithm");
 		if(newUser == null || !newUser.getPassWord().equals(hashedPassword) && !newUser.getRole().equals(role)) {
 			LOG.error("Username did not match: " + username);
 			throw new UserNotFoundException();
@@ -62,41 +64,18 @@ public class AuthService {
 		LOG.info("Login for user: " + newUser.getUserName() + " was successful");
 		return token;
 	}
-	public boolean register(String username, String password, Role role) throws NoSuchAlgorithmException, UserNotFoundException {
+	public boolean register(String username, String password, Role role) throws NoSuchAlgorithmException, UserAlreadyExistsException {
 		String hashPassword;
 		hashPassword= hashingAlgo(password);
 		Users newUser = new Users(username,hashPassword,role);
 		if(newUser == null || username != newUser.getUserName()) {
-			LOG.info("User with username: "+ username + "already exists!");
-			throw new UserNotFoundException();
+			LOG.warn("User with username: "+ username + "already exists!");
+			throw new UserAlreadyExistsException();
 		}
 		userRepo.save(newUser);
-		String token = newUser.getUserID()+ ":"+ newUser.getRole().toString();
-		//return token;
+		LOG.info("User with username: "+ username + " was created!");
 		return true;
-		
 	}
-	//
-	public Users getUserByRole(Users user) {
-		Users u = userRepo.findUsersByRole(user.getRole());
-		
-		if(!user.equals(u.getRole())) {
-			return null;
-		}
-		return u;
-		
-	}
-	/*
-	public String generateToken(UserDTO user) {
-		
-		int ID = user.getUserID();
-		
-		
-		String userID = Integer.toString(ID);
-		String role = user.getRole().toString();
-		
-		return userID + "::" + role;
-	}*/
 	
 	public boolean verifyCustomerToken(String token) throws UserNotFoundException {
 		if(token == null) {
@@ -104,15 +83,12 @@ public class AuthService {
 		}
 		
 		String [] tokenizedToken = token.split(":");
-		Users principal = userRepo.findById(Integer.valueOf(tokenizedToken[0])).orElse(null);
-		//int id = Integer.parseInt(tokenizedToken[1]);
+		Users principal = userRepo.findById(Integer.valueOf(tokenizedToken[0])).orElse(null);		
 		
 		if(principal == null || !principal.getRole().toString().equals(tokenizedToken[1]) || !principal.getRole().toString().equals("CUSTOMER")) {
-			System.out.println("Must be a customer!" + principal.getRole().toString());
-			LOG.info("User not a Customer");
+			LOG.error("User not a Customer");
 			throw new UserNotFoundException();
 		}
-		
 		LOG.info("Token verified successfully: " + principal.getRole());
 		return true;
 	}
@@ -123,15 +99,12 @@ public class AuthService {
 		
 		String [] tokenizedToken = token.split(":");
 		Users principal = userRepo.findById(Integer.valueOf(tokenizedToken[0])).orElseThrow(UserNotFoundException::new);
-		//int id = Integer.parseInt(tokenizedToken[1]);
 		
 		if(principal == null || !principal.getRole().toString().equals(tokenizedToken[1]) || !principal.getRole().toString().equals("EMPLOYEE")) {
-			System.out.println("Must be an employee!" + principal.getRole().toString());
 			LOG.error("Unauthorized member: " + principal.getUserID() + "is not an employee");
 			throw new UserNotFoundException();
 			
 		}
-		
 		LOG.info("Token verified successfully");
 		return true;
 	}

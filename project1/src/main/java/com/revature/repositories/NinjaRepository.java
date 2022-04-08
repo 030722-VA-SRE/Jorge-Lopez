@@ -13,7 +13,10 @@ public interface NinjaRepository extends JpaRepository<Ninja,Integer>{
 	//@Query("SELECT * FROM ninjas WHERE village = :village")
 	public List<Ninja> findByVillage(@Param("village") String village);
 	
-	//@Query("SELECT * FROM ninjas WHERE jutsu = :jutsu")
-	public List<Ninja> findByJutsu(@Param("jutsu") String justsu);
+	
+	//public List<Ninja> findByJutsu(@Param("jutsu") String justsu);
 
+	
+	@Query("SELECT n FROM Ninja n WHERE n.jutsu LIKE %:jutsu%")
+	public List<Ninja> findByJutsuLike(@Param("jutsu") String justsu);
 }

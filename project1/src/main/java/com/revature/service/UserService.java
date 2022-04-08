@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.exceptions.NinjaNotFoundException;
+import com.revature.exceptions.UserAlreadyExistsException;
 import com.revature.modals.CustomerTransaction;
 import com.revature.modals.Ninja;
 import com.revature.modals.Users;
@@ -33,24 +34,24 @@ public class UserService {
 			AuthService authService){
 		super();
 		this.userRepo = userRepo;
-		//this.ninjaRepo=ninjaRepo;
 		this.authService = authService;
 	}
 	//Create customer account
-	public Users addUser(Users customer) throws NoSuchAlgorithmException {
+	public Users addUser(Users customer) throws NoSuchAlgorithmException,UserAlreadyExistsException {
 		String passwordEntered = null;
 		String hashedPassword;
 		if(customer.equals(userRepo.findUsersByuserName(customer.getUserName()))) {
-			//System.out.println("User already exists");
-			log.info(customer.getUserName() + "already exists!");
+			log.warn(customer.getUserName() + "already exists!");
 		}
 		passwordEntered = customer.getPassWord();
 		hashedPassword = authService.hashingAlgo(passwordEntered);
 		customer.setPassWord(hashedPassword);
+		log.info("User: " + customer.getUserName() + "created and stored!" );
 		return userRepo.save(customer);
 	}
 	//Get all users in User table
 	public List<Users> getUsers(){
+		
 		return userRepo.findAll();	
 	}
 	

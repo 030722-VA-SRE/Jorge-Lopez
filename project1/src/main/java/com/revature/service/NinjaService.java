@@ -57,7 +57,7 @@ public class NinjaService {
 	
 	}
 	public List<Ninja> getNinjaByJutsu(@Param("jutsu") String jutsu) {
-		return ninjaRepo.findByJutsu(jutsu);
+		return ninjaRepo.findByJutsuLike(jutsu);
 		
 	}
 	@Transactional

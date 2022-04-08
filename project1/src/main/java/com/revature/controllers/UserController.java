@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.exceptions.UserAlreadyExistsException;
 import com.revature.exceptions.UserNotFoundException;
 import com.revature.modals.Users;
 import com.revature.service.AuthService;
@@ -37,7 +38,7 @@ public class UserController {
 		
 	}
 	@PostMapping
-	public ResponseEntity<String> createUser(@RequestBody Users newUser) throws NoSuchAlgorithmException{
+	public ResponseEntity<String> createUser(@RequestBody Users newUser) throws NoSuchAlgorithmException, UserAlreadyExistsException{
 		Users u = userService.addUser(newUser);
 		if(u == null) {
 			log.error("User can not be added: Must enter proper input");

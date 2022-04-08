@@ -105,7 +105,7 @@ public class NinjaServiceTest {
 
 		Ninja n3 = new Ninja(3,"Kakashi Hatake", "Hidden-Leaf-Village","Lightning Blade","6th Hokage",67);
 		ninjaList.add(n3);
-		Mockito.when(ninjaRepo.findByJutsu("Lightning Blade")).thenReturn(ninjaList);
+		Mockito.when(ninjaRepo.findByJutsuLike("Lightning Blade")).thenReturn(ninjaList);
 		assertEquals(ninjaService.getNinjaByJutsu("Lightning Blade"),ninjaList);
 	}
 	@Test
