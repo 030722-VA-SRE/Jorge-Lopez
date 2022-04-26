@@ -1,6 +1,6 @@
 # Jorge-Lopez
 
-# Migration API (Project 1) [Project 1 -- same as above](https://github.com/030722-VA-SRE/Jorge-Lopez/tree/main/project1)
+# Migration API (Project 1) [Project 1](https://github.com/030722-VA-SRE/Jorge-Lopez/tree/main/project1)
 
 ## Project Description
 Migrated and containerized a RESTful Javalin web application to Spring Boot deployed using Docker-Compose. Application logs are exported using Promtail to Loki and monitored through a Grafana dashboard.
